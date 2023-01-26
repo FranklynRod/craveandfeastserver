@@ -2,29 +2,25 @@ import pytest
 
 
 @pytest.mark.skip
-#def_test_get_favorites_no_saved_favorites():
-#ACT
-#ASSERT
-#assert response.status_code == 200
+def test_delete_one_favorite(client, favorites):
+    #ACT
+    response =  client.delete('/favorites/1')
+    response_body = response.get_json
 
-
-@pytest.mark.skip
-#def_test_get_favorites_not_found():
-#ACT
-#ASSERT
-#assert response.status_code == 400
+    #ASSERT
+    assert response.status_code == 200
+    assert 'message' in response_body
+    assert response_body == { f'message': 'Favorites #1 was deleted.'}
 
 @pytest.mark.skip
-#def_test_delete_favorited():
-#ACT
-#ASSERT
-#assert response.status_code == 200
+def test_delete_once_favorite_not_found(client):
+    #ACT
+    response =  client.delete('/favorites/222')
+    response_body = response.get_json
 
-@pytest.mark.skip
-#def_test_delete_favorited_not_found():
-#ACT
-#ASSERT
-#assert response.status_code == 200
+    #ASSERT
+    assert response.status_code == 404
+    assert response_body == { f'message': 'Favorites #222 was not found.'}
 
 @pytest.mark.skip
 #def_test_create_account():
@@ -39,7 +35,28 @@ import pytest
 #def_test_create_account_must_have_email_addresse():
 
 @pytest.mark.skip
-#def_test_delete_account():
+def test_delete_account(client, once_account):
+    #ACT
+    response =  client.delete('/account/1')
+    response_body = response.get_json
+
+    #ASSERT
+    assert response.status_code == 200
+    assert 'message' in response_body
+    assert response_body == { f'message': 'Account #1 was deleted.'}
 
 @pytest.mark.skip
-#def_test_delete_account_not_found():
+def test_delete_account_not_found(client):
+    #ACT
+    response =  client.delete('/account/32')
+    response_body = response.get_json
+
+    #ASSERT
+    assert response.status_code == 404
+    assert response_body == { f'message': 'Account #32 was not found.'}
+
+@pytest.mark.skip
+def test_read_all_favorites(client):
+
+@pytest.mark.skip
+def test_read_all_favorites(client):
