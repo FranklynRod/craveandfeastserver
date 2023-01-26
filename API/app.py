@@ -1,17 +1,18 @@
-from flask import Flask, jsonify,request, make_response
-# import firebase_admin
-# from firebase_admin import credentials
+from flask import Flask, jsonify,request, make_response, Blueprint
+import firebase_admin
+from firebase_admin import credentials, initialize_app, firestore
+
+cred = credentials.Certificate("key.json")
+default_app = firebase_admin.initialize_app(cred)
 
 
+db = firestore.client()
+user_Ref = db.collection('Account')
 
-# cred = credentials.Certificate("key.json")
-# firebase_admin.initialize_app(cred)
-
-app=Flask(__name__)
+app = Blueprint('app', __name__)
 
 #HELPER to Validate
 #validate response is valid and exists throw error if not
-
 
 #ROUTES
 
@@ -20,6 +21,10 @@ app=Flask(__name__)
 @app.route('/register',methods=["POST"])
 def create_account():
     request_body = request.get_json()
+    data={
+        "name": request_body.name,
+        "email": request_body.email
+    }
     #new_account={JSON body with request body}
 
     return make_response(jsonify({
@@ -73,5 +78,3 @@ def delete_favorites(favorited_id):
     return make_response(jsonify(response_body
     ),200) 
 
-if __name__ == '__main__':
-    app.run(debug=True)
