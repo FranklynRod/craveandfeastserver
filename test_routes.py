@@ -1,7 +1,6 @@
 import pytest
 
-
-@pytest.mark.skip
+# @pytest.mark.skip
 def test_delete_one_favorite(client, favorites):
     #ACT
     response =  client.delete('/favorites/1')
@@ -35,7 +34,7 @@ def test_delete_once_favorite_not_found(client):
 #def_test_create_account_must_have_email_addresse():
 
 @pytest.mark.skip
-def test_delete_account(client, once_account):
+def test_delete_account(client, one_account):
     #ACT
     response =  client.delete('/account/1')
     response_body = response.get_json
@@ -55,8 +54,8 @@ def test_delete_account_not_found(client):
     assert response.status_code == 404
     assert response_body == { f'message': 'Account #32 was not found.'}
 
-@pytest.mark.skip
-def test_read_all_favorites(client):
+# @pytest.mark.skip
+# def test_read_all_favorites(client):
 
-@pytest.mark.skip
-def test_read_all_favorites(client):
+# @pytest.mark.skip
+# def test_read_all_favorites(client):
