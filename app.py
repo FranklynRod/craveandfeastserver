@@ -4,6 +4,7 @@ from firebase_admin import credentials, initialize_app, firestore
 import os
 from dotenv import load_dotenv
 import requests
+import json
 
 load_dotenv()
 
@@ -26,7 +27,9 @@ Edmam_Key = os.environ.get("Edmam_Key")
 #Create Account
 @app.route('/register',methods=["POST"])
 def create_account():
-    request_body = request.get_json()
+    request_body = request.get_data()
+    request_body = json.loads(request_body)
+    print(request.get_data())
     data={
         "name": request_body["name"],
         "email": request_body["email"]
