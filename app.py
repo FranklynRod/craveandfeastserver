@@ -12,7 +12,11 @@ load_dotenv()
 
 # Database
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "google-credentials.json"
-cred = credentials.Certificate("google-credentials")
+try:
+    cred = credentials.Certificate("google-credentials")
+    print(cred)
+except:
+    print("failed credentials")
 default_app = firebase_admin.initialize_app(cred)
 
 db = firestore.client()
