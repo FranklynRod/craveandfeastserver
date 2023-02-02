@@ -11,6 +11,7 @@ from flask_cors import CORS
 load_dotenv()
 
 # Database
+os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "google-credentials.json"
 cred = credentials.Certificate("google-credentials")
 default_app = firebase_admin.initialize_app(cred)
 
@@ -24,6 +25,7 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 CORS(app)
 
 # API
+
 Edmam_ID = os.environ.get("Edmam_ID")
 Edmam_Key = os.environ.get("Edmam_Key")
 
