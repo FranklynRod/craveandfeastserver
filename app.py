@@ -7,16 +7,15 @@ from dotenv import load_dotenv
 import requests
 import json
 from flask_cors import CORS
+from oauth2client.client import GoogleCredentials
+
 
 load_dotenv()
 
 # Database
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "google-credentials.json"
-try:
-    cred = credentials.Certificate("google-credentials")
-    print(cred)
-except:
-    print("failed credentials")
+# cred = credentials.Certificate("google-credentials")
+cred = GoogleCredentials.get_application_default()
 default_app = firebase_admin.initialize_app(cred)
 
 db = firestore.client()
