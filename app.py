@@ -13,9 +13,11 @@ from oauth2client.client import GoogleCredentials
 load_dotenv()
 
 # Database
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "google-credentials.json"
+
+gc= os.environ["GOOGLE_CREDENTIALS"] 
+
 # cred = credentials.Certificate("google-credentials")
-cred = GoogleCredentials.get_application_default()
+cred = GoogleCredentials.from_json(gc)
 print(cred)
 default_app = firebase_admin.initialize_app(cred)
 
