@@ -7,14 +7,14 @@ from dotenv import load_dotenv
 import requests
 import json
 from flask_cors import CORS
-from oauth2client.client import GoogleCredentials, file
+from oauth2client.client import GoogleCredentials
 
 
 load_dotenv()
 
 # Database
 
-gc= os.environ["GOOGLE_CREDENTIALS"]
+gc= os.environ.get("GOOGLE_CREDENTIALS")
 # cred = credentials.Certificate("google-credentials")
 # store = file.Storage('google-credentials.json')
 # creds = store.get()
