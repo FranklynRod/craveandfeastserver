@@ -18,11 +18,11 @@ gc= os.environ.get("GOOGLE_CREDENTIALS")
 # cred = credentials.Certificate("google-credentials")
 # store = file.Storage('google-credentials.json')
 # creds = store.get()
-
+print(gc)
 cred = GoogleCredentials.from_json(gc)
 print(cred)
 default_app = firebase_admin.initialize_app(cred)
-
+print(default_app)
 db = firestore.client()
 # user_Ref = db.collection('Account')
 
@@ -119,6 +119,7 @@ def delete_one_favorite(account_id, favorites_id):
 
 @app.route('/api/recipes/v2', methods=["GET"])
 def get_recipes():
+    print(get_recipes())
     q_query = request.args.get("q")
     options = {
         'app_id': Edmam_ID,
@@ -132,6 +133,7 @@ def get_recipes():
         return {"message": "must provide q parameters"}
     r = requests.get(url, params=options)
     response=r.json()
+    print(response)
     size = len(response['hits'])
     data_list= []
     for i in range(size):
@@ -144,6 +146,7 @@ def get_recipes():
             'ingredientLines': the_response['ingredientLines']
         }
         data_list.append(data)
+    print(data_list)
     return make_response(jsonify(data_list))
 
 
