@@ -14,10 +14,11 @@ load_dotenv()
 
 # Database
 
-gc= os.environ["GOOGLE_CREDENTIALS"] 
+# gc= os.environ["GOOGLE_CREDENTIALS"] 
 
 # cred = credentials.Certificate("google-credentials")
-cred = GoogleCredentials.from_json(gc)
+cred = None
+# cred = GoogleCredentials.from_json(gc)
 print(cred)
 default_app = firebase_admin.initialize_app(cred)
 
