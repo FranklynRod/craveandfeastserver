@@ -7,22 +7,13 @@ from dotenv import load_dotenv
 import requests
 import json
 from flask_cors import CORS
-from oauth2client.client import GoogleCredentials
-
 
 load_dotenv()
-#working
-# Database
 
-gc= os.environ.get("GOOGLE_CREDENTIALS")
-# cred = credentials.Certificate("google-credentials")
-# store = file.Storage('google-credentials.json')
-# creds = store.get()
-print(gc)
-cred = GoogleCredentials.from_json(gc)
-print(cred)
+# Database
+cred = credentials.Certificate("key.json")
 default_app = firebase_admin.initialize_app(cred)
-print(default_app)
+
 db = firestore.client()
 # user_Ref = db.collection('Account')
 
@@ -33,7 +24,6 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 CORS(app)
 
 # API
-
 Edmam_ID = os.environ.get("Edmam_ID")
 Edmam_Key = os.environ.get("Edmam_Key")
 
@@ -46,7 +36,6 @@ Edmam_Key = os.environ.get("Edmam_Key")
 def create_account():
     request_body = request.get_data()
     request_body = json.loads(request_body)
-    print(request.get_data())
     data = {
         "name": request_body["name"],
         "email": request_body["email"]
@@ -66,8 +55,7 @@ def delete_account(account_id):
         db.collection('Account').document(account_id).delete()
         response_body = {
             'message': f'Account {account_id} was deleted.'}
-        return make_response(jsonify(response_body
-                                     ), 200)
+        return make_response(jsonify(response_body), 200)
     except Exception as e:
         return f"An Error Occured: {e}"
 
@@ -81,9 +69,19 @@ def update_account(account_id):
     except Exception as e:
         return f"An Error Occurred: {e}"
 
+#Create Favorites
+@app.route('/account/<account_id>/favorite', methods=["POST"])
+def add_favorites(account_id):
+    try:
+        request_body = request.get_data()
+        request_body = json.loads(request_body)
+        db.collection('Account').document(account_id).collection('Favorites').add(request_body['recipe'])
+        return jsonify({'message': f'Favorite was added to account {account_id}.'}), 200
+    except Exception as e:
+        return f"An Error Occurred: {e}"
+
+
 # Read ALL Favorites
-
-
 @app.route('/account/<account_id>/favorites', methods=["GET"])
 def read_all_favorites(account_id):
     # docs= db.collection('Favorites').stream()
@@ -97,7 +95,6 @@ def read_all_favorites(account_id):
     # return make_response(jsonify(f'{doc.id} => {doc.to_dict()}'),200)
 
 # #Delete One Favorite
-
 
 @app.route('/account/<account_id>/favorites/<favorites_id>', methods=["DELETE"])
 def delete_one_favorite(account_id, favorites_id):
@@ -119,7 +116,6 @@ def delete_one_favorite(account_id, favorites_id):
 
 @app.route('/api/recipes/v2', methods=["GET"])
 def get_recipes():
-    print(get_recipes())
     q_query = request.args.get("q")
     options = {
         'app_id': Edmam_ID,
@@ -133,7 +129,6 @@ def get_recipes():
         return {"message": "must provide q parameters"}
     r = requests.get(url, params=options)
     response=r.json()
-    print(response)
     size = len(response['hits'])
     data_list= []
     for i in range(size):
@@ -146,7 +141,6 @@ def get_recipes():
             'ingredientLines': the_response['ingredientLines']
         }
         data_list.append(data)
-    print(data_list)
     return make_response(jsonify(data_list))
 
 
