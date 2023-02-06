@@ -15,7 +15,6 @@ cred = credentials.Certificate("key.json")
 default_app = firebase_admin.initialize_app(cred)
 
 db = firestore.client()
-# user_Ref = db.collection('Account')
 
 #Flask/CORS
 app = Flask(__name__)
@@ -37,10 +36,10 @@ def create_account():
     request_body = request.get_data()
     request_body = json.loads(request_body)
     data = {
-        "name": request_body["name"],
-        "email": request_body["email"]
+        "username": request_body["username"]
     }
-    db.collection('Account').add(data)
+    #TODO:Make sure username is unique
+    db.collection('Account').document(data['username']).set(data)
 
     return make_response(jsonify({
         'message': 'Account was created'
