@@ -15,6 +15,7 @@ cred = credentials.Certificate("key.json")
 default_app = firebase_admin.initialize_app(cred)
 
 db = firestore.client()
+# user_Ref = db.collection('Account')
 
 #Flask/CORS
 app = Flask(__name__)
@@ -36,8 +37,10 @@ def create_account():
     request_body = request.get_data()
     request_body = json.loads(request_body)
     data = {
-        "username": request_body["username"]
+        "username": request_body["user"],
+        "password": request_body["pwd"]
     }
+    print(data)
     #TODO:Make sure username is unique
     db.collection('Account').document(data['username']).set(data)
 
@@ -79,22 +82,39 @@ def add_favorites(account_id):
     except Exception as e:
         return f"An Error Occurred: {e}"
 
+# Read one username
+@app.route('/auth', methods=["GET"])
+def read_account():
+    # request_body = json.loads(request_body)
+    # docs = db.collection('Account').document(user_name).stream()
+    # return (jsonify(docs), 200)
+    user=request.args.get("user")
+    password=request.args.get("pwd")
+    
+    try:
+        doc = db.collection("Account").document(user).get().to_dict()
+        if password == doc["password"]:
+            response_body = {'message': f'User #{user} has signed in.'}
+            return make_response(jsonify(response_body), 200)
+        else:
+            response_body = {'message': f'Password is incorrect.'}
+            return make_response(jsonify(response_body), 400)
+    except:
+        response_body = {'message': f'User does not exist.'}
+        return make_response(jsonify(response_body), 400)
+
 
 # Read ALL Favorites
 @app.route('/account/<account_id>/favorites', methods=["GET"])
 def read_all_favorites(account_id):
-    # docs= db.collection('Favorites').stream()
     docs = db.collection('Account').document(
         account_id).collection('Favorites').stream()
-    # doc_list=[f'{doc.id} => {doc.to_dict()}' for doc in docs]
     doc_list = []
     for doc in docs:
         doc_list.append(f'{doc.id} => {doc.to_dict()}')
     return (jsonify(doc_list), 200)
-    # return make_response(jsonify(f'{doc.id} => {doc.to_dict()}'),200)
 
-# #Delete One Favorite
-
+# Delete One Favorite
 @app.route('/account/<account_id>/favorites/<favorites_id>', methods=["DELETE"])
 def delete_one_favorite(account_id, favorites_id):
     try:
