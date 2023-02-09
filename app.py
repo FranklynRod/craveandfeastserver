@@ -111,7 +111,7 @@ def read_all_favorites(account_id):
         account_id).collection('Favorites').stream()
     doc_list = []
     for doc in docs:
-        doc_list.append(f'{doc.id} => {doc.to_dict()}')
+        doc_list.append(doc.to_dict())
     return (jsonify(doc_list), 200)
 
 # Delete One Favorite
