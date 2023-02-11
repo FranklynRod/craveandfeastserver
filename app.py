@@ -77,7 +77,16 @@ def add_favorites(account_id):
     try:
         request_body = request.get_data()
         request_body = json.loads(request_body)
-        db.collection('Account').document(account_id).collection('Favorites').add(request_body['recipe'])
+        all_favorites = db.collection('Account').document(account_id).collection('Favorites').stream()
+        favorites={}
+        for doc in all_favorites:
+            favorites[doc.id]= doc.to_dict()
+        if request_body["recipe"] in favorites.values():
+            for id in favorites.keys():
+                if request_body["recipe"] == favorites[id]:
+                    db.collection('Account').document(account_id).collection('Favorites').document(id).delete()
+        else:
+            db.collection('Account').document(account_id).collection('Favorites').add(request_body['recipe'])
         return jsonify({'message': f'Favorite was added to account {account_id}.'}), 200
     except Exception as e:
         return f"An Error Occurred: {e}"
