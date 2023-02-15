@@ -41,7 +41,7 @@ def create_account():
         "password": request_body["pwd"]
     }
     print(data)
-    #TODO:Make sure username is unique
+    
     db.collection('Account').document(data['username']).set(data)
 
     return make_response(jsonify({
@@ -134,8 +134,7 @@ def delete_one_favorite(account_id, favorites_id):
         # db.collection('Favorites').document(favorites_id).delete()
         response_body = {
             'message': f'Favorites #{favorites_id} was deleted.'}
-        return make_response(jsonify(response_body
-                                     ), 200)
+        return make_response(jsonify(response_body), 200)
     except Exception as e:
         return f"An Error Occured: {e}"
 
