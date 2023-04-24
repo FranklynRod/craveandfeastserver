@@ -6,12 +6,13 @@ Crave and Feast uses React frontend and Python and Flask on the backend while us
 
 ## Demo
 ***
-{Demo Link}
+[{Crave and Feast Demo Link}](https://www.loom.com/share/e364226cb1d64206ba988a5233a4691a)
 
 ## Features
 ***
 * Can register and sign-in to access account
-* Can find recipes base on ingredients typed into dashboard
+* Can find recipes based on ingredients typed into dashboard
+* Can create a profile page to customize experience
 * Can add favorite recipes to profile page by hearting
 * Can remove favorite recipes to profile page by hearting within profile page
 * Accessible navigation using keyboard
@@ -22,6 +23,8 @@ Crave and Feast uses React frontend and Python and Flask on the backend while us
 Crave and Feast uses Edamam Recipe Search API. An API call was completed to 
 * Get recipes based on ingredients searched
 * Get recipes that populate homepage
+* Read saved recipes on user's profile
+* Delete favorite recipes by unfavoriting recipe on profile page
 
 ## Cloud Firestore
 ***
