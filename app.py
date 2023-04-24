@@ -15,7 +15,6 @@ cred = credentials.Certificate("key.json")
 default_app = firebase_admin.initialize_app(cred)
 
 db = firestore.client()
-# user_Ref = db.collection('Account')
 
 #Flask/CORS
 app = Flask(__name__)
@@ -27,11 +26,8 @@ CORS(app)
 Edmam_ID = os.environ.get("Edmam_ID")
 Edmam_Key = os.environ.get("Edmam_Key")
 
-# ROUTES
 
 # Create Account
-
-
 @app.route('/register', methods=["POST"])
 def create_account():
     request_body = request.get_data()
@@ -49,8 +45,6 @@ def create_account():
     }), 201)
 
 # Delete Account
-
-
 @app.route('/account/<account_id>', methods=["DELETE"])
 def delete_account(account_id):
     try:
@@ -62,7 +56,7 @@ def delete_account(account_id):
         return f"An Error Occured: {e}"
 
 
-# Update account to change name or email
+# Update Account To Change Name or Email
 @app.route('/account/<account_id>', methods=["PUT"])
 def update_account(account_id):
     try:
@@ -91,12 +85,9 @@ def add_favorites(account_id):
     except Exception as e:
         return f"An Error Occurred: {e}"
 
-# Read one username
+# Read One Username
 @app.route('/auth', methods=["GET"])
 def read_account():
-    # request_body = json.loads(request_body)
-    # docs = db.collection('Account').document(user_name).stream()
-    # return (jsonify(docs), 200)
     user=request.args.get("user")
     password=request.args.get("pwd")
     
@@ -127,11 +118,8 @@ def read_all_favorites(account_id):
 @app.route('/account/<account_id>/favorites/<favorites_id>', methods=["DELETE"])
 def delete_one_favorite(account_id, favorites_id):
     try:
-        # favorites_num = request.args.get('favorites_id')
         db.collection('Account').document(account_id).collection(
             'Favorites').document(favorites_id).delete()
-    # db.collection(‘Accounts’).document(account_id).collection(‘Favorites’).document(favorites_id)
-        # db.collection('Favorites').document(favorites_id).delete()
         response_body = {
             'message': f'Favorites #{favorites_id} was deleted.'}
         return make_response(jsonify(response_body), 200)
@@ -139,8 +127,7 @@ def delete_one_favorite(account_id, favorites_id):
         return f"An Error Occured: {e}"
 
 
-# Get specific Recipe
-
+# Get Specific Recipe
 @app.route('/api/recipes/v2', methods=["GET"])
 def get_recipes():
     q_query = request.args.get("q")
